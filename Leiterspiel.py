@@ -1,4 +1,4 @@
-import os
+import os #Modul für OS holen, um den Bildschirm leeren zu können
 
 MinPip = 1  #Minimale Anzahl der Würfelaugen
 MaxPip = 6  #Maximal Anzahl der Würfelaugen
