@@ -15,16 +15,16 @@ Cancel = False  #Variable die zu Beendigung des Programms benutzt wird
 #Übergabewert zu prüfende Variable
 #Der Rückgabewert sagt aus, ob es eine Zahl war oder nicht
 def CheckIfInputIsnumeric(InputPip):
-    if not InputPip.isdigit():
-        print("Eingabe war keine Zahl!")
+    if not InputPip.isdigit(): #Prüfen ob der Wert eine Zahl ist
+        print("Eingabe war keine Zahl!") 
     return InputPip.isdigit()
 
 #Funktion prüft, ob die eingebene Zahl innerhalb der zugelassenen Werte für Würfelaugenzahlen liegt. Wenn nicht, wird eine Meldung ausgegeben
 #Übergabewert zu prüfende Variable
 #der Rückgabewert sagt aus, ob die eingegebene Zahl innerhalb der zugelassenen Werte liegt
 def CheckIfInputIsInRange(InputPip):
-    InputPipInt = int(InputPip)
-    if not MinPip <= InputPipInt <= MaxPip :
+    InputPipInt = int(InputPip) #Wert in Zahlumanwandeln, sonst ist keine Auswertung der Spanne möglich
+    if not MinPip <= InputPipInt <= MaxPip : #Spanne prüfen
         print(f"Zahl ist nicht zwischen {MinPip} und {MaxPip}")
     return MinPip <= InputPipInt <= MaxPip
 
@@ -36,11 +36,11 @@ def IsLadder(Position):
     for Ladder in Ladders: #durch Leiterliste loopen
         LowerRung, UpperRung = Ladder #Werte lesen
         if Position == LowerRung or Position == UpperRung: # prüfen ob die Position einem Feld der Leiter enspricht
-            ReturnValue = True
+            ReturnValue = True #Rückgabewert ist wahr, also ist man auf einem Leiterfeld
         else:
-            ReturnValue = False
+            ReturnValue = False #Rückgabewert ist falsch, also ist man auf keinem Leiterfeld
         if ReturnValue:
-            break    
+            break #Schleife verlassen da die Leiter gefunden wurde und wir nicht weiter such müssen
         i = i + 1   #Zähler für den Index, damit nachgelagerte Funktion direkt auf diesen Index zugreifen können, ohne Schleife
     return ReturnValue, i
 
