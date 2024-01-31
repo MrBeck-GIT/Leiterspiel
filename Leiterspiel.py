@@ -1,6 +1,4 @@
 import os
-import time
-
 
 MinPip = 1  #Minimale Anzahl der Würfelaugen
 MaxPip = 6  #Maximal Anzahl der Würfelaugen
@@ -92,60 +90,62 @@ def CheckInfiniteLoopCondition(TriesToGetToGoal,UsedLadders):
     return IsInfiniteLoop, Reason
 
 def RollTheDice(Pip):
-    RollResults = []
-    UsedLadders = []
-    RollCounter = 0
-    CurrentPosition = 0
-    UsedLadders = []
-    TriesToGetToGoal = 0
-    while CurrentPosition < NumberOfGoal:
-        RollCounter = RollCounter + 1
-        CurrentPosition = CurrentPosition + Pip
-        if CurrentPosition > NumberOfGoal:
-            CurrentPosition = NumberOfGoal - (CurrentPosition - NumberOfGoal)
-            TriesToGetToGoal = TriesToGetToGoal + 1
-        IsLadderResult = IsLadder(CurrentPosition)
-        UseLadder, LaddersIndex = IsLadderResult
-        if UseLadder:
-            LadderResults = GetNewPosition(CurrentPosition, LaddersIndex)
-            CurrentPosition = LadderResults 
-            CountLadder(LaddersIndex,UsedLadders)
-        CheckForInfiniteLoopResults = CheckInfiniteLoopCondition(TriesToGetToGoal,UsedLadders)
-        IsInfiniteLoop, InfiniteLoopReason = CheckForInfiniteLoopResults  
-        if IsInfiniteLoop:   
-            RollCounter = InfiniteLoopReason
-            break
-    NewResult = [(Pip,RollCounter)]
-    RollResults.extend(NewResult)
-    return RollResults
+    RollResults = [] #Variable für Ergebnis initialisieren
+    UsedLadders = [] #Variable für benutzte Leitern initialisieren
+    RollCounter = 0 #Zähler für Würfelvorgänge
+    CurrentPosition = 0 #aktuelle Position auf dem Spielfeld
+    TriesToGetToGoal = 0 #Zähler für den letzten Würfel versuch
+    while CurrentPosition < NumberOfGoal: #Schleife für das Spiel, also solange wie man nicht das Ziel erreicht hat
+        RollCounter = RollCounter + 1 #Würfelvorgänge zählen
+        CurrentPosition = CurrentPosition + Pip #Position um die Würfelaugen versetz
+        if CurrentPosition > NumberOfGoal: #prüfen ob wir mit Würfel und unserer Position über das Ziel kommen
+            CurrentPosition = NumberOfGoal - (CurrentPosition - NumberOfGoal) #Zielfeld laut den Spielregeln ermitteln, auf das wir müssen, weil wir über das Ziel hinaus sind
+            TriesToGetToGoal = TriesToGetToGoal + 1 #Versuche das Ziel mit dem letzten Wurf zu erreichen, zählen um eine eventuelle Endlosschleife zu ermitteln
+        IsLadderResult = IsLadder(CurrentPosition) #prüfen ob wir uns gerade auf einem Leiterfeld befinden
+        UseLadder, LaddersIndex = IsLadderResult #Werte für Leiterfeldprüfung lesen
+        if UseLadder: #wenn wir eine Leiter benutzen müssen, also wenn es ein Leiterfeld ist
+            LadderResults = GetNewPosition(CurrentPosition, LaddersIndex) #das Zielfeld ermitteln lassen
+            CurrentPosition = LadderResults #unsere Position auf das Zielfeld setzen
+            CountLadder(LaddersIndex,UsedLadders) #die Benutzung der Leiter zählen um eine eventuelle Endlosschleife zu ermitteln
+        CheckForInfiniteLoopResults = CheckInfiniteLoopCondition(TriesToGetToGoal,UsedLadders) #prüfen ob eine Konditon für eine Endlosschleife vorliegt
+        IsInfiniteLoop, InfiniteLoopReason = CheckForInfiniteLoopResults #Werte für Endlosschleifenprüfung lesen
+        if IsInfiniteLoop:   # wenn es eine Endlosschleife ist
+            RollCounter = InfiniteLoopReason #wird die Anzahl der Würfelversuche mit dem Grund der Enlosschleife für spätere Auswertung überschrieben
+            break #Schleife für das Spiel verlassen, weil das Spiel Aufgrund einer Endlosschleife nicht erfüllt werden kann
+    NewResult = [(Pip,RollCounter)] #Resulat Tuple erzeugen
+    RollResults.extend(NewResult) #Resultat in Liste speichern
+    return RollResults #Resultate zurückgeben
     
 
+#Funkion analysiert die Ergebnisse uns gibt sie aus
+#Übergabe wert ist die Resultat Liste
 def AnalyseResults(RollResults):
-        Pip, Result = RollResults[0]
-        ResultString = str(Result)
-        if ResultString == ToMuchLadderUsageConditionText:
+        Pip, Result = RollResults[0] #da es wegen eines Wurfs nur ein Resultat geben kann, das erste Item der Liste lesen
+        ResultString = str(Result) #um später zu prüfen ob das Resultat eine Zahl ist, wird es in einen String umgewandelt um isdigit nutzen zu können
+        if ResultString == ToMuchLadderUsageConditionText: #wenn der Grund unser vordefinierter Text für zu viele Leiterbenutzungen ist
             print(f"Mit Augenzahl {Pip} ist kein Sieg möglich, da eine Endloschleife bei Leitern eintritt.")
-        elif ResultString == ToMuchTriesForGoalConditionText:
+        elif ResultString == ToMuchTriesForGoalConditionText: #wenn der Grund unser vordefinierter Text für zu viele letzte Würfelversuche um auf's Ziel zu kommen, ist
             print(f"Mit Augenzahl {Pip} ist kein Sieg möglich, da das Ziel nicht mit einem genauen Wurf beendet werden kann.")
-        elif ResultString.isdigit():
+        elif ResultString.isdigit(): #wenn es eine Zahl ist, ist das Spiel erfolgreich beendet und wir haben eine Anzahl Würfelvorgänge
             print(f"Mit Augenzahl {Pip} ist ein Sieg mit {ResultString} Würfen möglich.")
         
 
 
-while not Cancel:   
-    os.system('cls')
-    InputPip = input("Geben Sie eine Augenzahl ein (a für abbrechen): ")
-    if not InputPip == "a":
-        if CheckIfInputIsnumeric(InputPip):
-            if CheckIfInputIsInRange(InputPip):
-                RollResults = RollTheDice(int(InputPip))
-                AnalyseResults(RollResults)
-        print()
-        InputDoNext = input("(w)eiter (a)bbrechen   ")
-        if InputDoNext == "a":
+#das eigentliche Programm
+while not Cancel:   #solange niemand abbrechen möchte
+    os.system('cls') #bildschirm löschen
+    InputPip = input("Geben Sie eine Augenzahl ein (a für abbrechen): ") #Usereingabe lesen
+    if not InputPip == "a":# wenn kein a für abbrechen eingegeben wurde
+        if CheckIfInputIsnumeric(InputPip): #prüfen ob eine zahl eingeben wurde
+            if CheckIfInputIsInRange(InputPip): #prüfen ob sich die Zahl in der vorgebenen Spanne befindet
+                RollResults = RollTheDice(int(InputPip)) #die Würfel rollen lassen und das Resultat empfangen
+                AnalyseResults(RollResults) #Resultat analysieren
+        print()#eine leerZeile wegen der Übersichtlichkeit
+        InputDoNext = input("(w)eiter (a)bbrechen   ") #fragen wie wir weitermachen wollen
+        if InputDoNext == "a": #wenn ein a eingeben wurde die Ausstiegsbedingung für die Programmschleife setzten
             Cancel = True
     else:
-        Cancel = True
+        Cancel = True #wenn ein a eingeben wurde die Ausstiegsbedingung für die Programmschleife setzten
         
 
 
