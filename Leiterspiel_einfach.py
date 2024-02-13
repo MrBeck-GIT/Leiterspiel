@@ -18,6 +18,8 @@ Augenzahl = int(Augenzahl)
 while aktuelle_position != 100:
      aktuelle_position = aktuelle_position + Augenzahl
      aktuelle_position = IsLadder(aktuelle_position)
+     if aktuelle_position > 100:
+            aktuelle_position = 100 - (aktuelle_position - 100)
      AnzahlWürfe = AnzahlWürfe + 1
      if AnzahlWürfe == MaxWürfe:
         IsWinable = False
@@ -29,5 +31,3 @@ if IsWinable:
     print(f"Gewinnbar mit {AnzahlWürfe} Würfen")
 else:
     print("Nicht gewinnbar")
-
-
