@@ -17,9 +17,10 @@ Augenzahl = int(Augenzahl)
 
 while aktuelle_position != 100:
      aktuelle_position = aktuelle_position + Augenzahl
-     aktuelle_position = IsLadder(aktuelle_position)
      if aktuelle_position > 100:
-            aktuelle_position = 100 - (aktuelle_position - 100)
+         aktuelle_position = 100 - (aktuelle_position - 100)
+     aktuelle_position = IsLadder(aktuelle_position)
+
      AnzahlWürfe = AnzahlWürfe + 1
      if AnzahlWürfe == MaxWürfe:
         IsWinable = False
