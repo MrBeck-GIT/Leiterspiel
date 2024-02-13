@@ -121,13 +121,20 @@ def RollTheDice(Pip):
 #Übergabe wert ist die Resultat Liste
 def AnalyseResults(RollResults):
         Pip, Result = RollResults[0] #da es wegen eines Wurfs nur ein Resultat geben kann, das erste Item der Liste lesen
-        ResultString = str(Result) #um später zu prüfen ob das Resultat eine Zahl ist, wird es in einen String umgewandelt um isdigit nutzen zu können
-        if ResultString == ToMuchLadderUsageConditionText: #wenn der Grund unser vordefinierter Text für zu viele Leiterbenutzungen ist
-            print(f"Mit Augenzahl {Pip} ist kein Sieg möglich, da eine Endloschleife bei Leitern eintritt.")
-        elif ResultString == ToMuchTriesForGoalConditionText: #wenn der Grund unser vordefinierter Text für zu viele letzte Würfelversuche um auf's Ziel zu kommen, ist
-            print(f"Mit Augenzahl {Pip} ist kein Sieg möglich, da das Ziel nicht mit einem genauen Wurf beendet werden kann.")
-        elif ResultString.isdigit(): #wenn es eine Zahl ist, ist das Spiel erfolgreich beendet und wir haben eine Anzahl Würfelvorgänge
-            print(f"Mit Augenzahl {Pip} ist ein Sieg mit {ResultString} Würfen möglich.")
+        
+        if Result == ToMuchLadderUsageConditionText or Result == ToMuchTriesForGoalConditionText:
+                print("Spiel ist nicht zu gewinnen")
+        else:
+                print(f"Spiel kann mit {Result} Würfen gewonnen werden")
+        
+        
+        # ResultString = str(Result) #um später zu prüfen ob das Resultat eine Zahl ist, wird es in einen String umgewandelt um isdigit nutzen zu können
+        # if ResultString == ToMuchLadderUsageConditionText: #wenn der Grund unser vordefinierter Text für zu viele Leiterbenutzungen ist
+        #     print(f"Mit Augenzahl {Pip} ist kein Sieg möglich, da eine Endloschleife bei Leitern eintritt.")
+        # elif ResultString == ToMuchTriesForGoalConditionText: #wenn der Grund unser vordefinierter Text für zu viele letzte Würfelversuche um auf's Ziel zu kommen, ist
+        #     print(f"Mit Augenzahl {Pip} ist kein Sieg möglich, da das Ziel nicht mit einem genauen Wurf beendet werden kann.")
+        # elif ResultString.isdigit(): #wenn es eine Zahl ist, ist das Spiel erfolgreich beendet und wir haben eine Anzahl Würfelvorgänge
+        #     print(f"Mit Augenzahl {Pip} ist ein Sieg mit {ResultString} Würfen möglich.")
         
 
 
